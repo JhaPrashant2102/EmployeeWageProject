@@ -15,9 +15,11 @@ public class EmpWageBuilder implements APIUseCase {
 	
 	private int numOfCompany = 0;
 	private LinkedList<CompanyEmpWage> wageList;
+	private Map<String,Integer> companyMap;
 	
 	public EmpWageBuilder() {
 		wageList = new LinkedList<>();
+		companyMap = new HashMap<>();
 	}
 	
 	// overriding addCompanyEmpWage
@@ -29,6 +31,7 @@ public class EmpWageBuilder implements APIUseCase {
 		for(int i = 0; i<wageList.size();i++) {
 			CompanyEmpWage object1 =  wageList.get(i);
 			object1.setTotalPayOfEmployee(this.calculateWage(object1));
+			companyMap.put(object1.company,object1.totalPayOfEmployee);
 			System.out.println(object1);
 		}
 	}
@@ -56,11 +59,16 @@ public class EmpWageBuilder implements APIUseCase {
 		return totalEmpHours*object1.empRateHour;
 		
 	}
+	int getWage(String company) {
+		return companyMap.get(company);
+	}
 	public static void main(String args[]) {
+		//why APIUSECASE should be used?
 		EmpWageBuilder master = new EmpWageBuilder();
 		master.addCompanyEmpWage("Reliance",10, 20, 100);
 		master.addCompanyEmpWage("Jio", 10, 22, 120);
 		master.calculateWage();
+		System.out.println("Total wage of Jio is "+master.getWage("Jio"));
 	}
 	
 }
